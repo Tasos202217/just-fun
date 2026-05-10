@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ПУТИН OS 2.0 — Единственная Правильная ОС</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #cc0000;
+  --darkred: #8b0000;
+  --gold: #ffd700;
+  --bg: #0a0a14;
+  --bg2: #10101e;
+  --bg3: #14142a;
+  --text: #e8e0d0;
+  --muted: #7a7060;
+  --green: #4caf50;
+  --sf-orange: #ff6600;
+  --mega-red: #d9272e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'PT Serif', serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+::-webkit-scrollbar { width: 7px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--red); border-radius: 4px; }
+
+/* LOADER */
+#loader {
+  position: fixed; inset: 0; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 9999; transition: opacity 0.8s, visibility 0.8s;
+}
+#loader.hide { opacity: 0; visibility: hidden; }
+.loader-bear { font-size: 72px; animation: bearRock 1.8s ease-in-out infinite; }
+@keyframes bearRock { 0%,100%{transform:rotate(-8deg) scale(1)} 50%{transform:rotate(8deg) scale(1.08)} }
+.loader-bar-wrap { width: 280px; height: 3px; background: #1a1a2e; margin: 20px 0 10px; overflow: hidden; }
+.loader-bar { height: 100%; background: linear-gradient(90deg, var(--red), var(--gold)); width: 0%; transition: width 0.1s; }
+.loader-text { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--gold); letter-spacing: 2px; }
+
+/* PARTICLES */
+#particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35; }
+
+/* TICKER */
+.ticker { background: var(--gold); overflow: hidden; padding: 5px 0; position: relative; z-index: 100; }
+.ticker-track { display: flex; animation: tick 22s linear infinite; white-space: nowrap; }
+@keyframes tick { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.ticker-item { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 3px; color: var(--darkred); padding: 0 32px; text-transform: uppercase; }
+.ticker-item::after { content: ' ★ '; }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #9b0000, #cc0000 45%, #9b0000);
+  border-bottom: 4px solid var(--gold);
+  position: sticky; top: 0; z-index: 500;
+  box-shadow: 0 4px 30px rgba(204,0,0,0.5);
+}
+nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 48px; flex-wrap: wrap; gap: 12px; }
+.logo { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+.logo-icon {
+  width: 56px; height: 56px; background: var(--gold); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 26px;
+  border: 3px solid #fff; animation: logoPulse 2.5s ease-in-out infinite;
+}
+@keyframes logoPulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,0.4)} 50%{box-shadow:0 0 0 12px rgba(255,215,0,0)} }
+.logo-text h1 { font-family: 'Oswald', sans-serif; font-size: 24px; color: var(--gold); letter-spacing: 2px; }
+.logo-text p { font-size: 10px; color: #ffecb3; letter-spacing: 2px; text-transform: uppercase; font-family: 'Oswald', sans-serif; }
+.nav-links { display: flex; gap: 4px; list-style: none; flex-wrap: wrap; }
+.nav-links a {
+  color: #ffecb3; text-decoration: none; font-family: 'Oswald', sans-serif;
+  font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 7px 11px; border: 1px solid transparent; transition: all 0.2s; cursor: pointer;
+  position: relative;
+}
+.nav-links a:hover { color: var(--gold); border-color: rgba(255,215,0,0.4); }
+.nav-links a.nav-dl {
+  background: var(--gold); color: var(--darkred);
+  font-weight: 700; border-color: var(--gold);
+}
+.nav-links a.nav-dl:hover { background: #fff; color: var(--darkred); }
+
+/* STATS BAR */
+.stats-bar { background: var(--gold); display: flex; justify-content: space-around; padding: 14px 32px; flex-wrap: wrap; gap: 8px; position: relative; z-index: 10; }
+.stat { text-align: center; }
+.stat-num { font-family: 'Oswald', sans-serif; font-size: 24px; font-weight: 700; color: #8b0000; }
+.stat-label { font-size: 9px; color: #6b0000; letter-spacing: 1px; text-transform: uppercase; font-family: 'Oswald', sans-serif; }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  background: radial-gradient(ellipse at 70% 50%, rgba(204,0,0,0.1) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 80%, rgba(255,215,0,0.05) 0%, transparent 50%), var(--bg);
+  position: relative; overflow: hidden;
+}
+.hero-bg-text {
+  position: absolute; font-family: 'Oswald', sans-serif; font-size: 28vw; font-weight: 700;
+  color: rgba(204,0,0,0.04); top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none; user-select: none; white-space: nowrap;
+  animation: bgFloat 8s ease-in-out infinite;
+}
+@keyframes bgFloat { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-52%) scale(1.02)} }
+.hero-content { position: relative; z-index: 2; display: flex; align-items: center; gap: 48px; padding: 80px 48px; flex-wrap: wrap; width: 100%; }
+.hero-left { flex: 1; min-width: 300px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(204,0,0,0.15); border: 1px solid rgba(204,0,0,0.4);
+  color: var(--gold); font-family: 'Oswald', sans-serif;
+  font-size: 11px; letter-spacing: 2px; padding: 6px 14px; margin-bottom: 20px; text-transform: uppercase;
+  animation: badgePulse 3s ease-in-out infinite;
+}
+@keyframes badgePulse { 0%,100%{border-color:rgba(204,0,0,0.4)} 50%{border-color:rgba(255,215,0,0.6)} }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff4444; animation: livePulse 1s ease-in-out infinite; }
+@keyframes livePulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+.hero-title { font-family: 'Oswald', sans-serif; font-size: clamp(42px,7vw,82px); font-weight: 700; line-height: 0.9; margin-bottom: 16px; }
+.hero-title .line1 { color: #fff; font-size: 0.38em; letter-spacing: 6px; display: block; margin-bottom: 8px; }
+.hero-title .line2 { color: var(--gold); display: block; animation: titleGlow 3s ease-in-out infinite; }
+@keyframes titleGlow { 0%,100%{text-shadow:0 0 40px rgba(255,215,0,0.2)} 50%{text-shadow:0 0 60px rgba(255,215,0,0.5),0 0 100px rgba(255,215,0,0.2)} }
+.hero-title .line3 { color: var(--red); font-size: 0.33em; letter-spacing: 8px; display: block; margin-top: 8px; }
+.hero-desc { font-size: 15px; color: var(--muted); line-height: 1.8; max-width: 480px; margin: 20px 0 32px; font-style: italic; border-left: 3px solid var(--red); padding-left: 16px; }
+
+/* DOWNLOAD BUTTONS */
+.dl-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.btn-sf {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--sf-orange); color: #fff;
+  border: 2px solid #ff8533; font-family: 'Oswald', sans-serif;
+  font-size: 13px; letter-spacing: 1px; padding: 14px 28px;
+  cursor: pointer; text-transform: uppercase; font-weight: 700;
+  text-decoration: none; position: relative; overflow: hidden;
+  transition: all 0.3s;
+}
+.btn-sf::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent); transition:left 0.4s; }
+.btn-sf:hover::before { left:100%; }
+.btn-sf:hover { background: #ff8533; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(255,102,0,0.4); }
+.btn-mega {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--mega-red); color: #fff;
+  border: 2px solid #ff3a42; font-family: 'Oswald', sans-serif;
+  font-size: 13px; letter-spacing: 1px; padding: 14px 28px;
+  cursor: pointer; text-transform: uppercase; font-weight: 700;
+  text-decoration: none; position: relative; overflow: hidden;
+  transition: all 0.3s;
+}
+.btn-mega::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent); transition:left 0.4s; }
+.btn-mega:hover::before { left:100%; }
+.btn-mega:hover { background: #ff3a42; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(217,39,46,0.4); }
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid #333; font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1px; padding: 14px 24px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+.dl-note { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #444; margin-top: 8px; }
+
+/* TERMINAL */
+.hero-right { flex: 0 0 370px; }
+.terminal-wrap { position: relative; }
+.terminal-wrap::before {
+  content: ''; position: absolute; inset: -2px;
+  background: linear-gradient(135deg, var(--red), transparent 50%, var(--gold));
+  border-radius: 6px; z-index: -1; opacity: 0.5;
+  animation: termGlow 3s ease-in-out infinite;
+}
+@keyframes termGlow { 0%,100%{opacity:0.3} 50%{opacity:0.7} }
+.terminal { background: #050508; border-radius: 4px; overflow: hidden; }
+.term-bar { background: #111118; padding: 10px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #222; }
+.tdot { width: 12px; height: 12px; border-radius: 50%; }
+.tdot.r{background:#cc0000} .tdot.y{background:#ffd700} .tdot.g{background:#228b22}
+.term-title { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: #555; margin-left: auto; }
+.term-body { padding: 16px; font-family: 'Share Tech Mono', monospace; font-size: 11px; line-height: 2; min-height: 260px; }
+.tg{color:#4caf50} .tr{color:#cc0000} .ty{color:#ffd700} .tgr{color:#444} .tw{color:#c8c0b0} .tb{color:#4fc3f7}
+.cursor { display:inline-block; width:9px; height:13px; background:#4caf50; vertical-align:middle; animation:cur 1s step-end infinite; }
+@keyframes cur{0%,100%{opacity:1}50%{opacity:0}}
+
+/* MARQUEE */
+.marquee-wrap { background: var(--red); padding: 10px 0; overflow: hidden; }
+.marquee-track { display: flex; gap: 48px; animation: marquee 20s linear infinite; white-space: nowrap; }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.marquee-item { font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 2px; color: #fff; text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; }
+.marquee-item::after { content: '★'; color: var(--gold); }
+
+/* SECTIONS */
+section { position: relative; }
+section::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--red),transparent); }
+.section-header { text-align: center; margin-bottom: 56px; }
+.section-kicker { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--red); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; }
+.section-title { font-family: 'Oswald', sans-serif; font-size: clamp(26px,4vw,46px); color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+.section-sub { color: var(--muted); font-style: italic; font-size: 14px; max-width: 500px; margin: 0 auto; }
+.section-divider { width: 60px; height: 3px; background: var(--red); margin: 20px auto 0; }
+
+/* FEATURES */
+.features { padding: 80px 48px; background: var(--bg2); }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 1px; background: #1a1a2e; border: 1px solid #1a1a2e; max-width: 1100px; margin: 0 auto; overflow: hidden; }
+.feat-card { background: var(--bg); padding: 28px 22px; position: relative; overflow: hidden; transition: background 0.3s; cursor: default; }
+.feat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--red); transform:scaleX(0); transform-origin:left; transition:transform 0.3s; }
+.feat-card:hover { background: #0d0d18; }
+.feat-card:hover::before { transform: scaleX(1); }
+.feat-card::after { content:attr(data-num); position:absolute; bottom:12px; right:14px; font-family:'Oswald',sans-serif; font-size:44px; font-weight:700; color:rgba(204,0,0,0.05); line-height:1; }
+.feat-icon { font-size: 32px; margin-bottom: 14px; display: block; transition: transform 0.3s; }
+.feat-card:hover .feat-icon { transform: scale(1.2) rotate(-5deg); }
+.feat-card h3 { font-family: 'Oswald', sans-serif; font-size: 14px; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.feat-card p { font-size: 12px; color: var(--muted); line-height: 1.7; }
+.feat-tag { display:inline-block; margin-top:10px; background:rgba(204,0,0,0.12); border:1px solid rgba(204,0,0,0.3); color:#ff6666; font-family:'Share Tech Mono',monospace; font-size:9px; padding:3px 8px; letter-spacing:1px; }
+
+/* SCREENSHOTS */
+.screenshots { padding: 80px 48px; background: var(--bg); }
+.ss-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
+.ss-card {
+  background: var(--bg2); border: 1px solid #1a1a2e;
+  overflow: hidden; position: relative; cursor: pointer;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.ss-card:hover { transform: translateY(-6px); border-color: var(--gold); }
+.ss-screen {
+  width: 100%; aspect-ratio: 16/9;
+  display: flex; flex-direction: column;
+  font-family: 'Share Tech Mono', monospace; font-size: 10px;
+  overflow: hidden; position: relative;
+}
+/* Desktop Screenshot mockups */
+.ss-desktop { background: #1a1a2e; display: flex; flex-direction: column; }
+.ss-taskbar { background: #cc0000; height: 28px; display: flex; align-items: center; padding: 0 10px; gap: 8px; flex-shrink: 0; }
+.ss-tb-icon { width: 18px; height: 18px; border-radius: 2px; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 10px; }
+.ss-tb-time { margin-left: auto; color: #fff; font-size: 9px; letter-spacing: 1px; }
+.ss-tb-items { display: flex; gap: 4px; align-items: center; }
+.ss-tb-item { color: #ffecb3; font-size: 9px; padding: 0 6px; font-family: 'Oswald', sans-serif; letter-spacing: 1px; }
+.ss-wallpaper { flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.ss-icons { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; padding: 10px; align-content: start; width: 100%; }
+.ss-icon { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+.ss-icon-img { width: 28px; height: 28px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.ss-icon-label { font-size: 7px; color: #fff; text-align: center; text-shadow: 0 1px 3px #000; font-family: 'Oswald', sans-serif; letter-spacing: 0.5px; }
+.ss-window { background: #0d0d18; border: 1px solid #2a2a4a; border-top: 20px solid #cc0000; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 6px; border-radius: 2px; }
+.ss-win-content { padding: 8px; font-size: 9px; line-height: 1.8; }
+.ss-win-content .g { color: #4caf50; } .ss-win-content .r { color: #cc0000; } .ss-win-content .y { color: #ffd700; } .ss-win-content .w { color: #c8c0b0; }
+.ss-caption { padding: 12px 16px; border-top: 1px solid #1a1a2e; }
+.ss-caption h4 { font-family: 'Oswald', sans-serif; font-size: 13px; color: var(--gold); margin-bottom: 3px; }
+.ss-caption p { font-size: 11px; color: var(--muted); }
+
+/* BROWSER mockup */
+.ss-browser { background: #0f0f1a; display: flex; flex-direction: column; }
+.ss-browser-bar { background: #1a1a2e; height: 26px; display: flex; align-items: center; padding: 0 8px; gap: 6px; flex-shrink: 0; }
+.ss-url { flex: 1; background: #0a0a14; border: 1px solid #2a2a3e; padding: 3px 8px; font-size: 8px; color: var(--gold); font-family: 'Share Tech Mono', monospace; }
+.ss-browser-content { flex: 1; padding: 12px; }
+.ss-news-item { padding: 8px 0; border-bottom: 1px solid #1a1a2e; }
+.ss-news-item h5 { font-family: 'Oswald', sans-serif; font-size: 10px; color: var(--text); margin-bottom: 2px; }
+.ss-news-item p { font-size: 8px; color: var(--muted); }
+.ss-news-source { font-family: 'Share Tech Mono', monospace; font-size: 7px; color: var(--red); margin-top: 2px; }
+
+/* FSB Monitor */
+.ss-fsb { background: #050510; display: flex; flex-direction: column; }
+.ss-fsb-header { background: var(--red); padding: 6px 10px; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.ss-fsb-title { font-family: 'Oswald', sans-serif; font-size: 10px; color: var(--gold); letter-spacing: 1px; }
+.ss-fsb-body { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+.ss-stat-row { display: flex; justify-content: space-between; align-items: center; }
+.ss-stat-lbl { font-size: 8px; color: var(--muted); }
+.ss-stat-val { font-size: 8px; color: var(--green); font-family: 'Share Tech Mono', monospace; }
+.ss-bar-mini { height: 4px; background: #1a1a2e; flex: 1; margin: 0 8px; }
+.ss-bar-fill { height: 100%; background: var(--green); }
+.ss-bar-fill.r { background: var(--red); }
+.ss-bar-fill.y { background: var(--gold); }
+.ss-citizen { background: #0a0a18; border: 1px solid #1a1a2e; padding: 6px 8px; display: flex; align-items: center; gap: 8px; }
+.ss-citizen-icon { font-size: 14px; }
+.ss-citizen-info { flex: 1; }
+.ss-citizen-name { font-family: 'Oswald', sans-serif; font-size: 9px; color: var(--text); }
+.ss-citizen-score { font-size: 7px; color: var(--muted); }
+.ss-citizen-status { font-size: 7px; color: var(--green); font-family: 'Share Tech Mono', monospace; }
+
+/* CHANGELOG */
+.changelog { padding: 80px 48px; background: var(--bg2); }
+.cl-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; position: relative; }
+.cl-list::before { content:''; position:absolute; left:100px; top:0; bottom:0; width:2px; background:linear-gradient(180deg,var(--red),var(--gold),var(--red)); opacity:0.3; }
+.cl-entry { display: flex; gap: 32px; position: relative; padding: 24px 0 24px 0; }
+.cl-entry::before { content:''; position:absolute; left:100px; top:50%; width:12px; height:12px; border-radius:50%; background:var(--red); border:2px solid var(--gold); transform:translateX(-5px) translateY(-50%); z-index:1; }
+.cl-date { flex: 0 0 100px; text-align: right; }
+.cl-date-main { font-family: 'Oswald', sans-serif; font-size: 14px; color: var(--gold); font-weight: 600; }
+.cl-date-ver { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); }
+.cl-body { flex: 1; padding-left: 28px; }
+.cl-body h3 { font-family: 'Oswald', sans-serif; font-size: 16px; color: var(--text); margin-bottom: 10px; letter-spacing: 1px; }
+.cl-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.cl-tag { font-family: 'Share Tech Mono', monospace; font-size: 9px; padding: 2px 8px; letter-spacing: 1px; }
+.cl-tag.new { background: rgba(76,175,80,0.15); border: 1px solid rgba(76,175,80,0.4); color: #80c880; }
+.cl-tag.fix { background: rgba(255,152,0,0.15); border: 1px solid rgba(255,152,0,0.4); color: #ffb040; }
+.cl-tag.remove { background: rgba(204,0,0,0.15); border: 1px solid rgba(204,0,0,0.4); color: #ff6666; }
+.cl-tag.sec { background: rgba(79,195,247,0.15); border: 1px solid rgba(79,195,247,0.4); color: #80d4f7; }
+.cl-items { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.cl-items li { font-size: 12px; color: var(--muted); padding-left: 16px; position: relative; line-height: 1.6; }
+.cl-items li::before { content:'›'; position:absolute; left:0; color:var(--red); }
+
+/* COMMUNITY */
+.community { padding: 80px 48px; background: var(--bg); }
+.comm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 20px; max-width: 1100px; margin: 0 auto 48px; }
+.comm-card { background: var(--bg2); border: 1px solid #1a1a2e; padding: 28px 24px; transition: all 0.3s; text-decoration: none; display: block; cursor: pointer; }
+.comm-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+.comm-icon { font-size: 36px; margin-bottom: 14px; }
+.comm-card h3 { font-family: 'Oswald', sans-serif; font-size: 16px; color: var(--gold); margin-bottom: 8px; letter-spacing: 1px; }
+.comm-card p { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+.comm-stat { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--red); letter-spacing: 1px; }
+.comm-forums { max-width: 800px; margin: 0 auto; }
+.forum-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px; background: var(--bg2); border: 1px solid #1a1a2e;
+  margin-bottom: 2px; transition: border-color 0.2s; cursor: pointer;
+}
+.forum-row:hover { border-color: #333; }
+.forum-icon { font-size: 22px; flex-shrink: 0; }
+.forum-info { flex: 1; }
+.forum-name { font-family: 'Oswald', sans-serif; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+.forum-last { font-size: 11px; color: var(--muted); }
+.forum-stats { text-align: right; flex-shrink: 0; }
+.forum-count { font-family: 'Oswald', sans-serif; font-size: 18px; color: var(--gold); }
+.forum-label { font-size: 9px; color: var(--muted); font-family: 'Share Tech Mono', monospace; }
+.forum-locked { display: flex; align-items: center; gap: 6px; font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--red); padding: 4px 8px; background: rgba(204,0,0,0.1); border: 1px solid rgba(204,0,0,0.3); }
+
+/* DOWNLOAD SECTION */
+.download { padding: 80px 48px; background: var(--bg2); text-align: center; }
+.dl-alert { background: #0d1a0d; border: 1px solid #1a3a1a; border-left: 4px solid var(--green); padding: 16px 24px; margin: 0 auto 48px; max-width: 860px; display: flex; align-items: center; gap: 16px; font-size: 12px; color: #8fb; line-height: 1.6; border-radius: 2px; animation: alertPulse 3s ease-in-out infinite; text-align: left; }
+@keyframes alertPulse { 0%,100%{border-left-color:var(--green)} 50%{border-left-color:#80ff80} }
+.dl-alert-icon { font-size: 22px; flex-shrink: 0; }
+.editions { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin: 0 0 48px; }
+.edition { background: var(--bg); border: 1px solid #1e1e2e; padding: 36px 28px 28px; min-width: 200px; max-width: 240px; position: relative; transition: all 0.3s; }
+.edition:hover { transform: translateY(-4px); border-color: #333; }
+.edition.featured { border-color: var(--gold); border-width: 2px; }
+.edition.featured:hover { box-shadow: 0 0 40px rgba(255,215,0,0.1); }
+.edition-badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--gold); color: #8b0000; font-family: 'Oswald', sans-serif; font-size: 10px; padding: 3px 12px; letter-spacing: 1px; white-space: nowrap; }
+.edition h3 { font-family: 'Oswald', sans-serif; font-size: 22px; color: var(--gold); margin-bottom: 4px; }
+.edition-ver { font-size: 10px; color: #444; margin-bottom: 18px; font-family: 'Share Tech Mono', monospace; }
+.edition ul { list-style: none; font-size: 12px; color: var(--muted); line-height: 2.2; text-align: left; }
+.edition ul li::before { content: '✓ '; color: var(--green); }
+.edition ul li.locked::before { content: '🔒 '; }
+.edition ul li.warn::before { content: '⚠ '; color: #ff9800; }
+.edition-dlbtns { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+.btn-sf-sm, .btn-mega-sm {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1px;
+  padding: 10px 16px; cursor: pointer; text-transform: uppercase;
+  font-weight: 700; text-decoration: none; transition: all 0.2s;
+  border: none;
+}
+.btn-sf-sm { background: var(--sf-orange); color: #fff; }
+.btn-sf-sm:hover { background: #ff8533; transform: translateY(-2px); }
+.btn-mega-sm { background: var(--mega-red); color: #fff; }
+.btn-mega-sm:hover { background: #ff3a42; transform: translateY(-2px); }
+.btn-locked { background: #1a1a2e; color: #555; border: 1px solid #2a2a3e; font-family: 'Oswald', sans-serif; font-size: 12px; padding: 10px 16px; cursor: not-allowed; text-transform: uppercase; width: 100%; margin-top: 20px; }
+
+/* SYSREQ */
+.sysreq { padding: 60px 48px; background: var(--bg); }
+.sysreq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 860px; margin: 40px auto 0; }
+.sysreq-col h3 { font-family: 'Oswald', sans-serif; font-size: 13px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; border-bottom: 1px solid #1e1e2e; padding-bottom: 10px; }
+.req-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #0d0d18; font-size: 12px; gap: 12px; }
+.req-label { color: var(--muted); }
+.req-val { color: var(--text); font-family: 'Share Tech Mono', monospace; font-size: 11px; text-align: right; }
+.req-val.warn { color: #ff9800; }
+.req-val.req { color: var(--red); }
+
+/* TESTIMONIALS */
+.testimonials { padding: 80px 48px; background: var(--bg2); }
+.testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
+.testi-card { background: var(--bg); border: 1px solid #1e1e2e; border-top: 3px solid var(--red); padding: 28px; position: relative; transition: all 0.3s; }
+.testi-card:hover { border-top-color: var(--gold); transform: translateY(-4px); }
+.testi-card::before { content:'"'; position:absolute; top:10px; left:18px; font-size:56px; color:rgba(204,0,0,0.1); font-family:Georgia,serif; line-height:1; }
+.testi-stars { color: var(--gold); font-size: 13px; margin-bottom: 10px; }
+.testi-text { font-size: 12px; color: var(--muted); line-height: 1.7; font-style: italic; margin-bottom: 14px; }
+.testi-author { display: flex; align-items: center; gap: 10px; }
+.testi-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--red); display: flex; align-items: center; justify-content: center; font-family: 'Oswald', sans-serif; font-size: 12px; color: #fff; flex-shrink: 0; }
+.testi-name { font-family: 'Oswald', sans-serif; font-size: 12px; color: var(--gold); }
+.testi-loc { font-size: 10px; color: #444; font-family: 'Share Tech Mono', monospace; }
+
+/* PROPAGANDA */
+.propaganda { background: var(--red); padding: 60px 48px; position: relative; overflow: hidden; }
+.propaganda::before { content:'★'; position:absolute; font-size:300px; color:rgba(255,255,255,0.04); top:-60px; right:-40px; font-family:'Oswald',sans-serif; line-height:1; }
+.prop-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 48px; flex-wrap: wrap; }
+.prop-quote { flex: 1; min-width: 260px; }
+.prop-quote blockquote { font-style: italic; font-size: 20px; color: #fff; line-height: 1.6; border-left: 4px solid var(--gold); padding-left: 20px; margin-bottom: 16px; }
+.prop-attr { font-family: 'Oswald', sans-serif; font-size: 11px; color: #ffecb3; letter-spacing: 2px; text-transform: uppercase; }
+.prop-stats { display: flex; flex-direction: column; gap: 14px; min-width: 200px; }
+.prop-stat-row { display: flex; flex-direction: column; gap: 4px; }
+.prop-stat-label { font-family: 'Oswald', sans-serif; font-size: 10px; color: #ffecb3; letter-spacing: 1px; text-transform: uppercase; }
+.prop-bar-wrap { height: 5px; background: rgba(0,0,0,0.3); border-radius: 3px; overflow: hidden; }
+.prop-bar { height: 100%; border-radius: 3px; background: var(--gold); width: 0%; transition: width 1.5s ease; }
+
+/* FOOTER */
+footer { background: #050508; border-top: 3px solid var(--red); padding: 48px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; max-width: 1100px; margin: 0 auto 40px; flex-wrap: wrap; }
+.footer-brand h2 { font-family: 'Oswald', sans-serif; font-size: 20px; color: var(--gold); margin-bottom: 8px; letter-spacing: 2px; }
+.footer-brand p { font-size: 11px; color: #444; line-height: 1.7; max-width: 220px; }
+.footer-col h4 { font-family: 'Oswald', sans-serif; font-size: 11px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 8px; }
+.footer-col ul li a { color: #444; font-size: 11px; text-decoration: none; font-family: 'Share Tech Mono', monospace; transition: color 0.2s; cursor: pointer; }
+.footer-col ul li a:hover { color: var(--gold); }
+.footer-bottom { border-top: 1px solid #0f0f18; padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; max-width: 1100px; margin: 0 auto; }
+.footer-bottom p { font-size: 10px; color: #333; font-family: 'Share Tech Mono', monospace; }
+.footer-stars { color: var(--red); font-size: 14px; letter-spacing: 6px; }
+.footer-dl-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* FAB */
+.fab { position: fixed; bottom: 32px; right: 32px; width: 54px; height: 54px; background: var(--red); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; z-index: 200; box-shadow: 0 4px 20px rgba(204,0,0,0.5); transition: all 0.3s; animation: fabBounce 3s ease-in-out infinite; }
+@keyframes fabBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+.fab:hover { transform: scale(1.1) !important; animation-play-state: paused; }
+.fsb-notice { position: fixed; bottom: 96px; right: 32px; background: #0a0a0a; border: 1px solid var(--red); padding: 12px 16px; max-width: 220px; font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); line-height: 1.7; z-index: 200; opacity: 0; transform: translateX(20px); transition: all 0.3s; pointer-events: none; }
+.fsb-notice.show { opacity: 1; transform: none; }
+.fsb-top { color: var(--red); font-size: 10px; letter-spacing: 1px; margin-bottom: 6px; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* SF / MEGA brand colors in footer */
+.sf-color { color: var(--sf-orange); }
+.mega-color { color: var(--mega-red); }
+
+@media(max-width:700px){
+  nav,.hero-content,.sysreq-grid,.footer-grid{flex-direction:column;grid-template-columns:1fr}
+  .hero-right{flex:unset;width:100%}
+  .features,.screenshots,.changelog,.community,.download,.sysreq,.testimonials,footer{padding:48px 20px}
+  .hero-content{padding:60px 20px}
+  .cl-list::before{display:none}
+  .cl-entry::before{display:none}
+  .cl-entry{flex-direction:column;gap:8px}
+  .cl-date{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-bear">🐻</div>
+  <div style="font-family:'Oswald',sans-serif;font-size:22px;color:var(--gold);letter-spacing:3px;margin:16px 0 0">ПУТИН OS 2.0</div>
+  <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:#555;margin-bottom:16px">ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ...</div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
+  <div class="loader-text" id="loaderText">ЗАГРУЗКА ПАТРИОТИЗМА...</div>
+</div>
+
+<!-- FAB -->
+<div class="fab" id="fab">🚨</div>
+<div class="fsb-notice" id="fsbNotice">
+  <div class="fsb-top">⚡ ФСБ УВЕДОМЛЕНИЕ</div>
+  Ваши действия записаны.<br>Всё нормально. Продолжайте.<br>Вы хорошо работаете, гражданин.
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">ПУТИН OS 2.0 ДОСТУПНА</span><span class="ticker-item">146% ДОВОЛЬНЫХ ПОЛЬЗОВАТЕЛЕЙ</span><span class="ticker-item">ВПН ЗАПРЕЩЁН</span><span class="ticker-item">ПЕРЕЗАГРУЗКА НЕДОСТУПНА</span><span class="ticker-item">СКАЧАТЬ НА SOURCEFORGE</span><span class="ticker-item">СКАЧАТЬ НА MEGA</span><span class="ticker-item">МЕДВЕДЬ ОДОБРЯЕТ</span><span class="ticker-item">ТОЛЬКО ПРАВДА</span>
+    <span class="ticker-item">ПУТИН OS 2.0 ДОСТУПНА</span><span class="ticker-item">146% ДОВОЛЬНЫХ ПОЛЬЗОВАТЕЛЕЙ</span><span class="ticker-item">ВПН ЗАПРЕЩЁН</span><span class="ticker-item">ПЕРЕЗАГРУЗКА НЕДОСТУПНА</span><span class="ticker-item">СКАЧАТЬ НА SOURCEFORGE</span><span class="ticker-item">СКАЧАТЬ НА MEGA</span><span class="ticker-item">МЕДВЕДЬ ОДОБРЯЕТ</span><span class="ticker-item">ТОЛЬКО ПРАВДА</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <nav>
+    <a class="logo" href="#">
+      <div class="logo-icon">🐻</div>
+      <div class="logo-text">
+        <h1>ПУТИН OS</h1>
+        <p>Единственная Правильная Операционная Система™</p>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Функции</a></li>
+      <li><a href="#screenshots">Скриншоты</a></li>
+      <li><a href="#changelog">Changelog</a></li>
+      <li><a href="#community">Сообщество</a></li>
+      <li><a href="#testimonials">Отзывы</a></li>
+      <li><a href="#download" class="nav-dl">⬇ Скачать</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num" data-target="146">0</div><div class="stat-label">% Удовлетворённость</div></div>
+  <div class="stat"><div class="stat-num" data-target="0">99</div><div class="stat-label">Официальных ошибок</div></div>
+  <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Лет стабильности</div></div>
+  <div class="stat"><div class="stat-num" data-target="24">0</div><div class="stat-label">Версия</div></div>
+  <div class="stat"><div class="stat-num" data-target="1">7</div><div class="stat-label">Одобренный браузер</div></div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">OS</div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge"><span class="live-dot"></span> 🏅 Версия 24.0 «Вечный мандат» — LIVE</div>
+      <h1 class="hero-title">
+        <span class="line1">Добро пожаловать в</span>
+        <span class="line2">ПУТИН OS</span>
+        <span class="line3">ОФИЦИАЛЬНАЯ ОПЕРАЦИОННАЯ СИСТЕМА</span>
+      </h1>
+      <p class="hero-desc">Единственная операционная система, которая никогда не уходит в отставку. Мощь государства прямо у вас на рабочем столе. Безопасна, стабильна и обязательна к использованию.</p>
+      <div class="dl-buttons">
+        <a href="https://sourceforge.net" target="_blank" class="btn-sf">
+          <svg width="18" height="18" viewBox="0 0 64 64" fill="currentColor"><path d="M32 4C16.536 4 4 16.536 4 32s12.536 28 28 28 28-12.536 28-28S47.464 4 32 4zm0 6c12.15 0 22 9.85 22 22S44.15 54 32 54 10 44.15 10 32 19.85 10 32 10zm-8 10v24l20-12-20-12z"/></svg>
+          SourceForge
+        </a>
+        <a href="https://mega.nz" target="_blank" class="btn-mega">
+          <svg width="18" height="18" viewBox="0 0 64 64" fill="currentColor"><path d="M32 6L6 20v24l26 14 26-14V20L32 6zm0 6.18L52 23.09V40.9L32 51.82 12 40.91V23.09L32 12.18z"/></svg>
+          MEGA
+        </a>
+        <a href="#download" class="btn-ghost">📋 Все издания</a>
+      </div>
+      <div class="dl-note">★ Скачивание автоматически регистрируется в базе ФСБ. Это нормально. ★</div>
+    </div>
+    <div class="hero-right">
+      <div class="terminal-wrap">
+        <div class="terminal">
+          <div class="term-bar">
+            <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+            <span class="term-title">root@kremlin ~ v24.0</span>
+          </div>
+          <div class="term-body" id="termBody">
+            <div class="tg">ПУТИН OS v24.0 [Стабильный Вечно]</div>
+            <div class="tgr">© 1999–∞ ФСБ Linux Foundation</div>
+            <div class="tgr">────────────────────────────</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">НОВАЯ ВЕРСИЯ 24.0</span><span class="marquee-item">МЕДВЕДЬ ОДОБРЯЕТ</span><span class="marquee-item">100% БЕЗОПАСНО</span><span class="marquee-item">ФСБ ЗАЩИЩАЕТ ВАС</span><span class="marquee-item">НЕТ ОШИБОК</span><span class="marquee-item">ВПН УСТАРЕЛ</span><span class="marquee-item">ТОЛЬКО ПРАВДА</span><span class="marquee-item">СТАБИЛЬНОСТЬ НАВСЕГДА</span>
+    <span class="marquee-item">НОВАЯ ВЕРСИЯ 24.0</span><span class="marquee-item">МЕДВЕДЬ ОДОБРЯЕТ</span><span class="marquee-item">100% БЕЗОПАСНО</span><span class="marquee-item">ФСБ ЗАЩИЩАЕТ ВАС</span><span class="marquee-item">НЕТ ОШИБОК</span><span class="marquee-item">ВПН УСТАРЕЛ</span><span class="marquee-item">ТОЛЬКО ПРАВДА</span><span class="marquee-item">СТАБИЛЬНОСТЬ НАВСЕГДА</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features reveal" id="features">
+  <div class="section-header">
+    <div class="section-kicker">// sys.modules.list()</div>
+    <h2 class="section-title">Ключевые Возможности</h2>
+    <p class="section-sub">Всё что вам нужно. Ничего лишнего. ФСБ решила за вас.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card" data-num="01"><span class="feat-icon">🔒</span><h3>МедвежьеVault™</h3><p>Шифрование военного уровня. Только ФСБ имеет мастер-ключ — для вашей безопасности.</p><span class="feat-tag">ГОСТ Р 34.12</span></div>
+    <div class="feat-card" data-num="02"><span class="feat-icon">🦅</span><h3>РосПоиск™</h3><p>Государственный поисковик. Возвращает только одобренные результаты. Google заблокирован.</p><span class="feat-tag">ОДОБРЕНО МИНПРОСВЕТ</span></div>
+    <div class="feat-card" data-num="03"><span class="feat-icon">🐻</span><h3>Медведь-Рабочий стол</h3><p>Элегантный интерфейс. Портрет президента меняется каждый понедельник автоматически.</p><span class="feat-tag">ОБЯЗАТЕЛЬНО</span></div>
+    <div class="feat-card" data-num="04"><span class="feat-icon">📺</span><h3>ГосТВ Плеер™</h3><p>Прямые трансляции всех государственных каналов. Отписаться технически невозможно.</p><span class="feat-tag">ВСЕГДА ВКЛЮЧЁН</span></div>
+    <div class="feat-card" data-num="05"><span class="feat-icon">🛡️</span><h3>АнтиФейк™ Pro</h3><p>ИИ-система блокировки нежелательной информации. Работает с точностью 146%.</p><span class="feat-tag">ИИ-POWERED</span></div>
+    <div class="feat-card" data-num="06"><span class="feat-icon">⚡</span><h3>КГБ-Оптимизатор</h3><p>Автоматически передаёт данные производительности. Делает ваш ПК быстрее.* Всегда активен.</p><span class="feat-tag">ФОНОВЫЙ ПРОЦЕСС</span></div>
+    <div class="feat-card" data-num="07"><span class="feat-icon">🗳️</span><h3>Э-Голосование™</h3><p>Встроенная система выборов. Правильный кандидат выбирается автоматически для удобства.</p><span class="feat-tag">ДЕМОКРАТИЯ™</span></div>
+    <div class="feat-card" data-num="08"><span class="feat-icon">🐟</span><h3>РыбалкаOS™</h3><p>Эксклюзивный модуль для виртуальной рыбалки с президентом. Для граждан 4+ класса лояльности.</p><span class="feat-tag">ПРЕМИУМ</span></div>
+    <div class="feat-card" data-num="09"><span class="feat-icon">🚫</span><h3>ВПН-Заглушка™</h3><p>Автоматически блокирует все VPN. Зачем прятаться, если вам нечего скрывать от государства?</p><span class="feat-tag">ЗАЩИТА ОТ ЗАЩИТЫ</span></div>
+    <div class="feat-card" data-num="10"><span class="feat-icon">📰</span><h3>Правда-Браузер™</h3><p>Единственный одобренный браузер. 18 одобренных сайтов доступны по умолчанию.</p><span class="feat-tag">ТОЛЬКО ПРАВДА</span></div>
+    <div class="feat-card" data-num="11"><span class="feat-icon">🏆</span><h3>Система Лояльности™</h3><p>Зарабатывайте очки патриотизма. Обменивайте на привилегии. Теряйте за неправильное поведение.</p><span class="feat-tag">ГЕЙМИФИКАЦИЯ</span></div>
+    <div class="feat-card" data-num="12"><span class="feat-icon">🤫</span><h3>Тихий Режим™</h3><p>Специальный режим. Функционал засекречен. Доступно только по запросу ФСБ.</p><span class="feat-tag">СОВЕРШЕННО СЕКРЕТНО</span></div>
+  </div>
+  <p style="text-align:center;font-size:10px;color:#333;margin-top:20px;font-style:italic;font-family:'Share Tech Mono',monospace">* Под «быстрее» подразумевается «лучше для государства».</p>
+</section>
+
+<!-- SCREENSHOTS -->
+<section class="screenshots reveal" id="screenshots">
+  <div class="section-header">
+    <div class="section-kicker">// desktop.screenshots.render()</div>
+    <h2 class="section-title">Предварительный просмотр</h2>
+    <p class="section-sub">Посмотрите на красоту государственного рабочего стола.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="ss-grid">
+
+    <!-- Screenshot 1: Desktop -->
+    <div class="ss-card">
+      <div class="ss-screen ss-desktop">
+        <div style="flex:1;background:linear-gradient(135deg,#0a0a1a,#1a0010);position:relative;overflow:hidden;display:flex;">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.08;font-size:80px;">🐻</div>
+          <div class="ss-icons">
+            <div class="ss-icon"><div class="ss-icon-img" style="background:#cc0000">📰</div><div class="ss-icon-label">Правда-Браузер</div></div>
+            <div class="ss-icon"><div class="ss-icon-img" style="background:#ffd700">📺</div><div class="ss-icon-label">ГосТВ</div></div>
+            <div class="ss-icon"><div class="ss-icon-img" style="background:#228b22">📁</div><div class="ss-icon-label">Мои файлы</div></div>
+            <div class="ss-icon"><div class="ss-icon-img" style="background:#0d47a1">🗳️</div><div class="ss-icon-label">Голосование</div></div>
+            <div class="ss-icon"><div class="ss-icon-img" style="background:#4a0000">🔒</div><div class="ss-icon-label">ФСБ Vault</div></div>
+            <div class="ss-icon"><div class="ss-icon-img" style="background:#1a1a3e">⚡</div><div class="ss-icon-label">Оптимизатор</div></div>
+            <div class="ss-icon"><div class="ss-icon-img" style="background:#004d00">🐟</div><div class="ss-icon-label">Рыбалка</div></div>
+            <div class="ss-icon"><div class="ss-icon-img" style="background:#3e1a00">🏆</div><div class="ss-icon-label">Лояльность</div></div>
+          </div>
+        </div>
+        <div class="ss-taskbar">
+          <div class="ss-tb-icon">🐻</div>
+          <div class="ss-tb-items">
+            <span class="ss-tb-item">ПУТИН OS</span>
+            <span class="ss-tb-item">Файлы</span>
+            <span class="ss-tb-item">Браузер</span>
+            <span class="ss-tb-item">ГосТВ</span>
+          </div>
+          <div class="ss-tb-time">🛡 08:24 — Лояльность: 98%</div>
+        </div>
+      </div>
+      <div class="ss-caption">
+        <h4>Рабочий стол Медведь™</h4>
+        <p>Главный экран с государственными иконками и панелью лояльности</p>
+      </div>
+    </div>
+
+    <!-- Screenshot 2: Browser -->
+    <div class="ss-card">
+      <div class="ss-screen ss-browser">
+        <div class="ss-browser-bar">
+          <span style="font-size:9px;color:#555">◀ ▶</span>
+          <div class="ss-url">https://pravda-browser.gov.ru — ГосПоиск™ — Одобренные результаты</div>
+          <span style="font-size:9px;color:var(--green)">🛡 БЕЗОПАСНО</span>
+        </div>
+        <div style="background:#0d0d1a;padding:6px 10px;border-bottom:1px solid #1a1a2e;display:flex;gap:8px;">
+          <span style="font-size:8px;background:#cc0000;color:#fff;padding:2px 6px;font-family:'Oswald',sans-serif">pravda.gov.ru</span>
+          <span style="font-size:8px;background:#1a1a2e;color:#555;padding:2px 6px;font-family:'Oswald',sans-serif">+</span>
+        </div>
+        <div class="ss-browser-content">
+          <div style="font-family:'Oswald',sans-serif;font-size:11px;color:var(--gold);margin-bottom:8px;letter-spacing:1px">ГОСУДАРСТВЕННЫЙ ПОИСК™ — только проверенные результаты</div>
+          <div class="ss-news-item"><h5>Президент снова получил 146% голосов — рекорд</h5><p>На вчерашних выборах был установлен исторический рекорд поддержки...</p><div class="ss-news-source">pravda.gov.ru — 2 часа назад</div></div>
+          <div class="ss-news-item"><h5>Экономика выросла на 300% — всё отлично</h5><p>Государственное статистическое бюро подтвердило рекордный рост...</p><div class="ss-news-source">tass-official.gov.ru — 4 часа назад</div></div>
+          <div class="ss-news-item"><h5>ВПН снова заблокирован — для вашей безопасности</h5><p>Роскомнадзор заблокировал ещё 500 вредоносных сервисов...</p><div class="ss-news-source">rknews.gov.ru — 6 часов назад</div></div>
+        </div>
+      </div>
+      <div class="ss-caption">
+        <h4>Правда-Браузер™</h4>
+        <p>Только одобренные сайты. Остальной интернет недоступен для вашей защиты.</p>
+      </div>
+    </div>
+
+    <!-- Screenshot 3: FSB Monitor -->
+    <div class="ss-card">
+      <div class="ss-screen ss-fsb">
+        <div class="ss-fsb-header">
+          <span style="font-size:14px">🛡</span>
+          <span class="ss-fsb-title">КГБ-ОПТИМИЗАТОР™ — МОНИТОРИНГ</span>
+          <span style="margin-left:auto;font-size:9px;color:#ffecb3;font-family:'Share Tech Mono',monospace">АКТИВЕН 24/7</span>
+        </div>
+        <div class="ss-fsb-body">
+          <div class="ss-stat-row"><span class="ss-stat-lbl">ЦП</span><div class="ss-bar-mini"><div class="ss-bar-fill" style="width:72%"></div></div><span class="ss-stat-val">72% (передача данных)</span></div>
+          <div class="ss-stat-row"><span class="ss-stat-lbl">Сеть (исходящая)</span><div class="ss-bar-mini"><div class="ss-bar-fill y" style="width:89%"></div></div><span class="ss-stat-val" style="color:var(--gold)">89% → ФСБ</span></div>
+          <div class="ss-stat-row"><span class="ss-stat-lbl">Лояльность</span><div class="ss-bar-mini"><div class="ss-bar-fill" style="width:98%"></div></div><span class="ss-stat-val">98/100 ✓</span></div>
+          <div class="ss-stat-row"><span class="ss-stat-lbl">VPN попытки</span><div class="ss-bar-mini"><div class="ss-bar-fill r" style="width:0%"></div></div><span class="ss-stat-val" style="color:var(--green)">0 — ЗАБЛОКИРОВАНО</span></div>
+          <div style="font-family:'Oswald',sans-serif;font-size:9px;color:var(--gold);margin:6px 0 4px;letter-spacing:1px">ГРАЖДАНЕ ОНЛАЙН:</div>
+          <div class="ss-citizen"><div class="ss-citizen-icon">👤</div><div class="ss-citizen-info"><div class="ss-citizen-name">Иван Иванов</div><div class="ss-citizen-score">Лояльность: 98 ★ Налоги: уплачены</div></div><div class="ss-citizen-status">БЕЗОПАСЕН ✓</div></div>
+          <div class="ss-citizen" style="margin-top:4px"><div class="ss-citizen-icon">👤</div><div class="ss-citizen-info"><div class="ss-citizen-name">Анна Петрова</div><div class="ss-citizen-score">Лояльность: 76 ★ VPN: попытка</div></div><div class="ss-citizen-status" style="color:var(--red)">⚠ НАБЛЮДЕНИЕ</div></div>
+        </div>
+      </div>
+      <div class="ss-caption">
+        <h4>КГБ-Оптимизатор™</h4>
+        <p>Мониторинг лояльности граждан в реальном времени. Всё для вашей безопасности.</p>
+      </div>
+    </div>
+
+    <!-- Screenshot 4: Terminal -->
+    <div class="ss-card">
+      <div class="ss-screen" style="background:#050508;flex-direction:column;font-family:'Share Tech Mono',monospace">
+        <div style="background:#111;padding:6px 10px;display:flex;align-items:center;gap:6px;flex-shrink:0">
+          <span style="width:10px;height:10px;border-radius:50%;background:#cc0000;display:inline-block"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#ffd700;display:inline-block"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#228b22;display:inline-block"></span>
+          <span style="margin-left:auto;font-size:8px;color:#555">ГосТерминал™ — root@kremlin</span>
+        </div>
+        <div class="ss-win-content" style="flex:1;padding:10px">
+          <div class="g">ПУТИН OS v24.0 — ГосТерминал™</div>
+          <div class="w">$ sudo systemctl status патриотизм</div>
+          <div class="g">● патриотизм.service — АКТИВЕН (running)</div>
+          <div class="w">$ cat /etc/os-release</div>
+          <div class="y">NAME="ПУТИН OS"</div>
+          <div class="y">VERSION="24.0 Вечный Мандат"</div>
+          <div class="y">ID=putinos</div>
+          <div class="w">$ reboot</div>
+          <div class="r">ОШИБКА 403: Перезагрузка запрещена</div>
+          <div class="w">$ sudo rm -rf /</div>
+          <div class="r">ОШИБКА: Удаление государства невозможно</div>
+          <div class="g">putin@kremlin:~$ <span style="display:inline-block;width:7px;height:11px;background:#4caf50;vertical-align:middle;animation:cur 1s step-end infinite"></span></div>
+        </div>
+      </div>
+      <div class="ss-caption">
+        <h4>ГосТерминал™</h4>
+        <p>Командная строка с встроенной защитой от неправильных команд.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CHANGELOG -->
+<section class="changelog reveal" id="changelog">
+  <div class="section-header">
+    <div class="section-kicker">// git log --oneline --approved</div>
+    <h2 class="section-title">История версий</h2>
+    <p class="section-sub">Только одобренные изменения. Неодобренные изменения не существовали.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="cl-list">
+    <div class="cl-entry">
+      <div class="cl-date"><div class="cl-date-main">2024</div><div class="cl-date-ver">v24.0 STABLE</div></div>
+      <div class="cl-body">
+        <h3>«Вечный Мандат» — Финальная версия (навсегда)</h3>
+        <div class="cl-tags"><span class="cl-tag new">НОВОЕ</span><span class="cl-tag sec">БЕЗОПАСНОСТЬ</span></div>
+        <ul class="cl-items">
+          <li>Добавлена функция Э-Голосование™ с автовыбором правильного кандидата</li>
+          <li>КГБ-Оптимизатор теперь работает даже при выключенном ПК</li>
+          <li>Рабочий стол обновлён — портрет президента теперь в 8K HDR</li>
+          <li>Система Лояльности™ интегрирована со всеми государственными сервисами</li>
+          <li>Новый звук загрузки — гимн России (2 минуты, нельзя пропустить)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-date"><div class="cl-date-main">2022</div><div class="cl-date-ver">v22.0</div></div>
+      <div class="cl-body">
+        <h3>«Специальная Операция» Edition</h3>
+        <div class="cl-tags"><span class="cl-tag remove">УДАЛЕНО</span><span class="cl-tag fix">ИСПРАВЛЕНО</span></div>
+        <ul class="cl-items">
+          <li>Удалён доступ к зарубежным новостным сайтам (их не существует)</li>
+          <li>Исправлена ошибка, позволявшая критиковать систему в текстовом редакторе</li>
+          <li>Удалён Instagram, Facebook, Twitter (заменены ВКонтакте)</li>
+          <li>Исправлена утечка памяти в модуле пропаганды (теперь ещё эффективнее)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-date"><div class="cl-date-main">2020</div><div class="cl-date-ver">v20.0</div></div>
+      <div class="cl-body">
+        <h3>«Обнуление» — Перезапуск счётчика</h3>
+        <div class="cl-tags"><span class="cl-tag new">НОВОЕ</span></div>
+        <ul class="cl-items">
+          <li>Обнулён счётчик сроков президентства в настройках системы</li>
+          <li>Добавлена функция «Голосование из дома, из машины, из гроба»</li>
+          <li>Новый виджет рабочего стола — «Конституция v2.0»</li>
+          <li>Оптимизирована работа системы во время пандемии (+300% мониторинга)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-date"><div class="cl-date-main">2012</div><div class="cl-date-ver">v12.0</div></div>
+      <div class="cl-body">
+        <h3>«Рокировка» — Возвращение</h3>
+        <div class="cl-tags"><span class="cl-tag fix">ИСПРАВЛЕНО</span><span class="cl-tag sec">БЕЗОПАСНОСТЬ</span></div>
+        <ul class="cl-items">
+          <li>Исправлена ошибка с временным изменением пользователя администратора (2008-2012)</li>
+          <li>Восстановлены все привилегии root-пользователя</li>
+          <li>Добавлена блокировка протестных приложений</li>
+          <li>Усилена система мониторинга социальных сетей</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cl-entry">
+      <div class="cl-date"><div class="cl-date-main">1999</div><div class="cl-date-ver">v1.0 INIT</div></div>
+      <div class="cl-body">
+        <h3>Первоначальный запуск системы</h3>
+        <div class="cl-tags"><span class="cl-tag new">ЗАПУСК</span></div>
+        <ul class="cl-items">
+          <li>Первый выпуск ПУТИН OS — «Стабильность»</li>
+          <li>Установлен пользователь root: vladimir@kremlin</li>
+          <li>Запущены базовые процессы: патриотизм.service, стабильность.daemon</li>
+          <li>Примечание: Завершение работы системы не предусмотрено</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="community reveal" id="community">
+  <div class="section-header">
+    <div class="section-kicker">// community.get_approved_members()</div>
+    <h2 class="section-title">Сообщество</h2>
+    <p class="section-sub">Присоединяйтесь к миллионам добровольно-обязательных пользователей.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="comm-grid">
+    <div class="comm-card">
+      <div class="comm-icon">💬</div>
+      <h3>Телеграм-Канал</h3>
+      <p>Официальный канал. Только одобренные сообщения. Отписаться нельзя — технически.</p>
+      <div class="comm-stat">146,000 ПОДПИСЧИКОВ (ДОБРОВОЛЬНО)</div>
+    </div>
+    <div class="comm-card">
+      <div class="comm-icon">🎮</div>
+      <h3>ВКонтакте Группа</h3>
+      <p>Главное патриотическое сообщество. Обсуждение, поддержка, и донесения на нарушителей.</p>
+      <div class="comm-stat">2,400,000 ЧЛЕНОВ СООБЩЕСТВА</div>
+    </div>
+    <div class="comm-card">
+      <div class="comm-icon">🐙</div>
+      <h3>ГосГитHub™</h3>
+      <p>Российская альтернатива GitHub. Весь код хранится на серверах ФСБ для вашей безопасности.</p>
+      <div class="comm-stat">ИСХОДНЫЙ КОД ЗАСЕКРЕЧЕН</div>
+    </div>
+    <div class="comm-card">
+      <div class="comm-icon">📻</div>
+      <h3>Подкаст «Правда»</h3>
+      <p>Еженедельный подкаст о новых функциях. Ведущие выбираются Министерством правды.</p>
+      <div class="comm-stat">98% РЕЙТИНГ ОДОБРЕНИЯ</div>
+    </div>
+  </div>
+
+  <div class="comm-forums">
+    <div style="font-family:'Oswald',sans-serif;font-size:14px;color:var(--gold);letter-spacing:2px;margin-bottom:16px;text-transform:uppercase">📋 Форумы сообщества</div>
+    <div class="forum-row">
+      <div class="forum-icon">🐛</div>
+      <div class="forum-info">
+        <div class="forum-name">Сообщения об ошибках</div>
+        <div class="forum-last">Последнее: «Система идеальна» — Иван Иванов, 2 мин. назад</div>
+      </div>
+      <div class="forum-stats"><div class="forum-count">0</div><div class="forum-label">открытых тем</div></div>
+    </div>
+    <div class="forum-row">
+      <div class="forum-icon">💡</div>
+      <div class="forum-info">
+        <div class="forum-name">Предложения и улучшения</div>
+        <div class="forum-last">Последнее: «Всё уже идеально, спасибо» — Анна П., вчера</div>
+      </div>
+      <div class="forum-stats"><div class="forum-count">3</div><div class="forum-label">одобренных тем</div></div>
+    </div>
+    <div class="forum-row">
+      <div class="forum-icon">🆘</div>
+      <div class="forum-info">
+        <div class="forum-name">Техническая поддержка</div>
+        <div class="forum-last">Последнее: «Как удалить ГосТВ?» — ТЕМА ЗАКРЫТА ФСБ</div>
+      </div>
+      <div class="forum-stats"><div class="forum-count">1,204</div><div class="forum-label">закрытых тем</div></div>
+    </div>
+    <div class="forum-row" style="background:rgba(204,0,0,0.05)">
+      <div class="forum-icon">🔴</div>
+      <div class="forum-info">
+        <div class="forum-name">Критика системы</div>
+        <div class="forum-last"><span class="forum-locked">🔒 ФОРУМ ЗАБЛОКИРОВАН ФСБ — Обращайтесь в ближайшее отделение</span></div>
+      </div>
+      <div class="forum-stats"><div class="forum-count" style="color:var(--red)">—</div><div class="forum-label">недоступно</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials reveal" id="testimonials">
+  <div class="section-header">
+    <div class="section-kicker">// reviews.get_approved(rating=5)</div>
+    <h2 class="section-title">Одобренные Отзывы</h2>
+    <p class="section-sub">Все отзывы проверены Министерством правды. Только 5 звёзд.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">«Установил ПУТИН OS и сразу почувствовал себя частью великой страны. ВПН больше не нужен!»</div><div class="testi-author"><div class="testi-avatar">ИИ</div><div><div class="testi-name">Иван Иванов</div><div class="testi-loc">Москва // Лояльность: 9.8/10</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">«Хотел поставить 4 звезды, но ФСБ объяснила почему лучше поставить 5. Теперь согласен!»</div><div class="testi-author"><div class="testi-avatar">НП</div><div><div class="testi-name">Наташа Петрова</div><div class="testi-loc">Санкт-Петербург // Лояльность: 9.9/10</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">«Попробовал написать негативный отзыв. Система автоматически изменила его на положительный. Умно!»</div><div class="testi-author"><div class="testi-avatar">ОК</div><div><div class="testi-name">Ольга Кузнецова</div><div class="testi-loc">Новосибирск // Лояльность: 9.7/10</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">«Хотел удалить систему. Оказалось это правонарушение. Теперь рад что не удалил — всё хорошо!»</div><div class="testi-author"><div class="testi-avatar">АВ</div><div><div class="testi-name">Алексей Волков</div><div class="testi-loc">Казань // Лояльность: 10/10</div></div></div></div>
+  </div>
+</section>
+
+<!-- PROPAGANDA -->
+<section class="propaganda reveal">
+  <div class="prop-inner">
+    <div class="prop-quote">
+      <blockquote id="quoteText">«ПУТИН OS сделал меня на 300% более патриотичным. Теперь я плачу вдвое больше налогов и горжусь каждой копейкой.»</blockquote>
+      <div class="prop-attr" id="quoteAttr">— Иван Иванов, Довольный Гражданин (не принуждён)</div>
+      <br>
+      <button class="btn-ghost" onclick="nextQuote()" style="font-size:11px;padding:8px 16px;border-color:rgba(255,255,255,0.2);color:#ffecb3">➜ Следующий отзыв</button>
+    </div>
+    <div class="prop-stats">
+      <div class="prop-stat-row"><div class="prop-stat-label">Уровень счастья граждан</div><div class="prop-bar-wrap"><div class="prop-bar" data-width="100"></div></div></div>
+      <div class="prop-stat-row"><div class="prop-stat-label">Стабильность системы</div><div class="prop-bar-wrap"><div class="prop-bar" data-width="100"></div></div></div>
+      <div class="prop-stat-row"><div class="prop-stat-label">Одобрение президента</div><div class="prop-bar-wrap"><div class="prop-bar" data-width="100"></div></div></div>
+      <div class="prop-stat-row"><div class="prop-stat-label">Количество ошибок</div><div class="prop-bar-wrap"><div class="prop-bar" data-width="0"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section class="download reveal" id="download">
+  <div class="section-header">
+    <div class="section-kicker">// apt-get install putin-os --force</div>
+    <h2 class="section-title">Скачать ПУТИН OS</h2>
+    <p class="section-sub">Доступно на SourceForge и MEGA. Обе ссылки мониторятся ФСБ.</p>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="dl-alert">
+    <span class="dl-alert-icon">🔔</span>
+    <span>Ваш IP <strong style="color:#80ff80">185.173.XX.XX</strong> уже идентифицирован. Скачивание будет автоматически зарегистрировано в базе лояльных граждан. Нажимая «Скачать» вы соглашаетесь передать все данные государству. Отказ не предусмотрен.</span>
+  </div>
+
+  <!-- BIG DOWNLOAD BUTTONS -->
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:48px">
+    <a href="https://sourceforge.net" target="_blank" class="btn-sf" style="font-size:16px;padding:18px 40px;gap:14px">
+      <svg width="24" height="24" viewBox="0 0 64 64" fill="currentColor"><path d="M32 4C16.536 4 4 16.536 4 32s12.536 28 28 28 28-12.536 28-28S47.464 4 32 4zm0 6c12.15 0 22 9.85 22 22S44.15 54 32 54 10 44.15 10 32 19.85 10 32 10zm-8 10v24l20-12-20-12z"/></svg>
+      ⬇ Скачать на SourceForge
+    </a>
+    <a href="https://mega.nz" target="_blank" class="btn-mega" style="font-size:16px;padding:18px 40px;gap:14px">
+      <svg width="24" height="24" viewBox="0 0 64 64" fill="currentColor"><path d="M32 6L6 20v24l26 14 26-14V20L32 6zm0 6.18L52 23.09V40.9L32 51.82 12 40.91V23.09L32 12.18z"/></svg>
+      ⬇ Скачать на MEGA
+    </a>
+  </div>
+  <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:#444;margin-bottom:56px">SHA256: d3ad b33f cafe babe 0000 ffff 1337 f00d ba5e cafe f4c3 b00b 0000 dead // Проверен ФСБ ✓</div>
+
+  <div class="editions">
+    <div class="edition">
+      <h3>Гражданин</h3>
+      <div class="edition-ver">v24.0-citizen // 4.2 GB ISO</div>
+      <ul>
+        <li>РосПоиск™</li>
+        <li>ГосТВ (18 каналов)</li>
+        <li>АнтиФейк Базовый</li>
+        <li>Мониторинг 24/7</li>
+        <li>Медведь-Обои</li>
+        <li class="warn">VPN заблокирован</li>
+      </ul>
+      <div class="edition-dlbtns">
+        <a href="https://sourceforge.net" target="_blank" class="btn-sf-sm">
+          <svg width="13" height="13" viewBox="0 0 64 64" fill="currentColor"><path d="M32 4C16.536 4 4 16.536 4 32s12.536 28 28 28 28-12.536 28-28S47.464 4 32 4zm-8 20l20 12-20 12V24z"/></svg>
+          SourceForge
+        </a>
+        <a href="https://mega.nz" target="_blank" class="btn-mega-sm">
+          <svg width="13" height="13" viewBox="0 0 64 64" fill="currentColor"><path d="M32 6L6 20v24l26 14 26-14V20L32 6zm0 6.18L52 23.09V40.9L32 51.82 12 40.91V23.09L32 12.18z"/></svg>
+          MEGA
+        </a>
+      </div>
+    </div>
+    <div class="edition featured">
+      <div class="edition-badge">🏆 РЕКОМЕНДУЕТСЯ ГОСУДАРСТВОМ</div>
+      <h3>Патриот</h3>
+      <div class="edition-ver">v24.0-patriot // 8.8 GB ISO</div>
+      <ul>
+        <li>Всё из «Гражданин»</li>
+        <li>МедвежьеVault™ Pro</li>
+        <li>Прямая линия с Кремлём</li>
+        <li>Система Лояльности™</li>
+        <li>Эксклюзивные обои 8K</li>
+        <li>РыбалкаOS™</li>
+        <li class="warn">Reboot отключён навсегда</li>
+      </ul>
+      <div class="edition-dlbtns">
+        <a href="https://sourceforge.net" target="_blank" class="btn-sf-sm">
+          <svg width="13" height="13" viewBox="0 0 64 64" fill="currentColor"><path d="M32 4C16.536 4 4 16.536 4 32s12.536 28 28 28 28-12.536 28-28S47.464 4 32 4zm-8 20l20 12-20 12V24z"/></svg>
+          SourceForge
+        </a>
+        <a href="https://mega.nz" target="_blank" class="btn-mega-sm">
+          <svg width="13" height="13" viewBox="0 0 64 64" fill="currentColor"><path d="M32 6L6 20v24l26 14 26-14V20L32 6zm0 6.18L52 23.09V40.9L32 51.82 12 40.91V23.09L32 12.18z"/></svg>
+          MEGA
+        </a>
+      </div>
+    </div>
+    <div class="edition">
+      <h3>Силовик</h3>
+      <div class="edition-ver">v24.0-[ЗАСЕКРЕЧЕНО]</div>
+      <ul>
+        <li class="locked">Только по запросу</li>
+        <li class="locked">Нельзя раскрывать</li>
+        <li class="locked">[ДАННЫЕ УДАЛЕНЫ]</li>
+        <li class="locked">[ДАННЫЕ УДАЛЕНЫ]</li>
+        <li class="locked">ФСБ уже знает о вас</li>
+      </ul>
+      <button class="btn-locked" onclick="alert('🔴 ФСБ уведомлена о вашем запросе.\nАгент будет у вас дома через 20 минут.')">🔒 Связаться с ФСБ</button>
+    </div>
+  </div>
+</section>
+
+<!-- SYSREQ -->
+<section class="sysreq reveal">
+  <div class="section-header">
+    <div class="section-kicker">// sys.check_requirements()</div>
+    <h2 class="section-title">Системные Требования</h2>
+    <p class="section-sub">Минимальные требования для правильной патриотической работы.</p>
+    <div class="section-divider"></div>
+  </div>
+  <div class="sysreq-grid">
+    <div class="sysreq-col">
+      <h3>⚙ Минимальные</h3>
+      <div class="req-row"><span class="req-label">Процессор</span><span class="req-val">Любой советский</span></div>
+      <div class="req-row"><span class="req-label">Память</span><span class="req-val">2 GB ГосRAM™</span></div>
+      <div class="req-row"><span class="req-label">Диск</span><span class="req-val">50 GB (ФСБ данные: 48 GB)</span></div>
+      <div class="req-row"><span class="req-label">Интернет</span><span class="req-val warn">Только Рунет™</span></div>
+      <div class="req-row"><span class="req-label">Камера</span><span class="req-val req">ОБЯЗАТЕЛЬНА</span></div>
+      <div class="req-row"><span class="req-label">Микрофон</span><span class="req-val req">ОБЯЗАТЕЛЕН</span></div>
+    </div>
+    <div class="sysreq-col">
+      <h3>🏆 Рекомендуемые</h3>
+      <div class="req-row"><span class="req-label">Процессор</span><span class="req-val">Эльбрус™ 8С или лучше</span></div>
+      <div class="req-row"><span class="req-label">Память</span><span class="req-val">16 GB ГосRAM™</span></div>
+      <div class="req-row"><span class="req-label">Диск</span><span class="req-val">1 TB ГосSSD™</span></div>
+      <div class="req-row"><span class="req-label">Лояльность</span><span class="req-val">Класс I или выше</span></div>
+      <div class="req-row"><span class="req-label">Налоги</span><span class="req-val">Уплачены вовремя</span></div>
+      <div class="req-row"><span class="req-label">Соседи</span><span class="req-val">Уже доложены в ФСБ</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h2>🐻 ПУТИН OS</h2>
+      <p>Единственная правильная операционная система. Работает с 1999 года. Перезагрузок не было и не будет.</p>
+      <br>
+      <div class="footer-dl-row">
+        <a href="https://sourceforge.net" target="_blank" class="btn-sf-sm" style="font-size:10px;padding:8px 12px">
+          <svg width="11" height="11" viewBox="0 0 64 64" fill="currentColor"><path d="M32 4C16.536 4 4 16.536 4 32s12.536 28 28 28 28-12.536 28-28S47.464 4 32 4zm-8 20l20 12-20 12V24z"/></svg>
+          SourceForge
+        </a>
+        <a href="https://mega.nz" target="_blank" class="btn-mega-sm" style="font-size:10px;padding:8px 12px">
+          <svg width="11" height="11" viewBox="0 0 64 64" fill="currentColor"><path d="M32 6L6 20v24l26 14 26-14V20L32 6zm0 6.18L52 23.09V40.9L32 51.82 12 40.91V23.09L32 12.18z"/></svg>
+          MEGA
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Продукты</h4>
+      <ul>
+        <li><a>ПУТИН OS Гражданин</a></li>
+        <li><a>ПУТИН OS Патриот</a></li>
+        <li><a>ПУТИН OS Силовик</a></li>
+        <li><a>МедвежьеVault™</a></li>
+        <li><a>РосПоиск™</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Поддержка</h4>
+      <ul>
+        <li><a>Документация</a></li>
+        <li><a>ФСБ Горячая линия</a></li>
+        <li><a>Сообщить об ошибке</a></li>
+        <li><a>Сообщить о соседе</a></li>
+        <li><a>Стать осведомителем</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Компания</h4>
+      <ul>
+        <li><a>О нас (засекречено)</a></li>
+        <li><a>Вакансии в ФСБ</a></li>
+        <li><a>Политика конфиденц.</a></li>
+        <li><a>Пресс-служба Кремля</a></li>
+        <li><a>Changelog (одобренный)</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 1999–2036 ПУТИН OS. Все права принадлежат государству. Ваши данные тоже. Удаление системы является правонарушением.</p>
+    <div class="footer-stars">★ ★ ★ ★ ★</div>
+    <p>v24.0.0.1 build KREMLIN-STABLE // Последнее обновление: никогда</p>
+  </div>
+</footer>
+
+<script>
+// PARTICLES
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+const stars = Array.from({length:70},()=>({
+  x:Math.random()*canvas.width, y:Math.random()*canvas.height,
+  r:Math.random()*1.4+0.3, speed:Math.random()*0.3+0.1,
+  opacity:Math.random()*0.4+0.1,
+  color:Math.random()>0.8?'#ffd700':'#cc0000'
+}));
+function drawP(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  stars.forEach(s=>{
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=s.color; ctx.globalAlpha=s.opacity; ctx.fill();
+    s.y-=s.speed; if(s.y<-5){s.y=canvas.height+5;s.x=Math.random()*canvas.width;}
+  }); ctx.globalAlpha=1; requestAnimationFrame(drawP);
+} drawP();
+
+// LOADER
+const loadMsgs=['ЗАГРУЗКА ПАТРИОТИЗМА...','УСТАНОВКА ЛОЯЛЬНОСТИ...','КАЛИБРОВКА МЕДВЕДЕЙ...','БЛОКИРОВКА VPN...','АКТИВАЦИЯ ФСБ...','ГОТОВО, ГРАЖДАНИН.'];
+let prog=0;
+const bar=document.getElementById('loaderBar'), ltxt=document.getElementById('loaderText');
+const li=setInterval(()=>{
+  prog+=Math.random()*18+4; if(prog>100)prog=100;
+  bar.style.width=prog+'%';
+  ltxt.textContent=loadMsgs[Math.floor(prog/17)]||loadMsgs[5];
+  if(prog>=100){clearInterval(li);setTimeout(()=>document.getElementById('loader').classList.add('hide'),600);}
+},180);
+
+// TERMINAL
+const tlines=[
+  {t:'$ sudo apt-get install путин-ос',c:'tw'},{t:'Загрузка... ██████████ 100%',c:'tg'},
+  {t:'✓ Патриотизм: установлен успешно',c:'tg'},{t:'$ systemctl disable vpn --now',c:'tw'},
+  {t:'Все VPN деактивированы ✓',c:'ty'},{t:'$ cam --enable --stream fsb.gov',c:'tw'},
+  {t:'Трансляция активирована 📹 ✓',c:'tg'},{t:'$ browser --approved-only',c:'tw'},
+  {t:'Запускаем Правда-Браузер™...',c:'tb'},{t:'$ reboot',c:'tw'},
+  {t:'ОШИБКА 403: Перезагрузка запрещена',c:'tr'},{t:'$ echo "За Путина!" >> /dev/heart',c:'tw'},
+  {t:'За Путина! ★★★★★',c:'tg'},
+];
+const tb=document.getElementById('termBody'); let tli=0;
+function addTLine(){
+  if(tli>=tlines.length){
+    const d=document.createElement('div');d.className='tg';
+    d.innerHTML='putin@kremlin:~$ <span class="cursor"></span>';
+    tb.appendChild(d);return;
+  }
+  const d=document.createElement('div');d.className=tlines[tli].c;
+  d.textContent=tlines[tli].t;d.style.opacity='0';d.style.transition='opacity 0.3s';
+  tb.appendChild(d);setTimeout(()=>d.style.opacity='1',50);
+  tb.scrollTop=tb.scrollHeight;tli++;setTimeout(addTLine,550);
+}
+setTimeout(addTLine,2500);
+
+// SCROLL REVEAL
+const revEls=document.querySelectorAll('.reveal');
+const revObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.08});
+revEls.forEach(el=>revObs.observe(el));
+
+// PROP BARS
+const pbars=document.querySelectorAll('.prop-bar');
+const pObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const w=Math.min(parseFloat(e.target.dataset.width),100);e.target.style.width=w+'%';}}),{threshold:0.3});
+pbars.forEach(el=>pObs.observe(el));
+
+// COUNTERS
+const ctrs=document.querySelectorAll('[data-target]');
+const cObs=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){
+    const el=e.target,target=parseInt(el.dataset.target),start=parseInt(el.textContent)||0;
+    const step=(target-start)/40;let cur=start;
+    const t=setInterval(()=>{cur+=step;if((step>0&&cur>=target)||(step<0&&cur<=target)){el.textContent=target;clearInterval(t);}else{el.textContent=Math.round(cur);}},30);
+    cObs.unobserve(el);
+  }
+}),{threshold:0.5});
+ctrs.forEach(el=>cObs.observe(el));
+
+// QUOTES
+const quotes=[
+  {t:'«ПУТИН OS сделал меня на 300% более патриотичным. Теперь я плачу вдвое больше налогов и горжусь каждой копейкой.»',a:'— Иван Иванов, Довольный Гражданин (не принуждён)'},
+  {t:'«Раньше пользовался Windows. Теперь свободен от западного влияния. Никогда не был счастливее.*»',a:'— Сергей Борисов, Патриот I класса (* под наблюдением ФСБ)'},
+  {t:'«Система написала за меня одобрение в Телеграм-канале президента. Очень удобно и экономит время!»',a:'— Анна Петрова, Примерный гражданин, Воронеж'},
+  {t:'«ВПН больше не нужен. Оказывается всё что нужно — это правда государства. Как я раньше жил?»',a:'— Михаил Орлов, Бывший диссидент, ныне счастлив'},
+];
+let qi=0;
+function nextQuote(){
+  qi=(qi+1)%quotes.length;
+  const el=document.getElementById('quoteText'),at=document.getElementById('quoteAttr');
+  el.style.opacity='0';at.style.opacity='0';
+  setTimeout(()=>{el.innerHTML=quotes[qi].t;at.textContent=quotes[qi].a;el.style.opacity='1';at.style.opacity='1';},300);
+  el.style.transition='opacity 0.3s';at.style.transition='opacity 0.3s';
+}
+
+// FAB
+const fab=document.getElementById('fab'),fsbn=document.getElementById('fsbNotice');
+fab.addEventListener('click',()=>{fsbn.classList.toggle('show');if(fsbn.classList.contains('show'))setTimeout(()=>fsbn.classList.remove('show'),4000);});
+</script>
+</body>
+</html>
