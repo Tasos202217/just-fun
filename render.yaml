@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: putinos
+    runtime: static
+    staticPublishPath: .
+    buildCommand: ""
